@@ -1,0 +1,12 @@
+{
+  "name": "cybermonday-scraper",
+  "version": "1.0.0",
+  "description": "Scraper de precios de TV",
+  "main": "scraper.js",
+  "scripts": {
+    "start": "node scraper.js"
+  },
+  "dependencies": {
+    "puppeteer": "^21.0.0" 
+  }
+}
