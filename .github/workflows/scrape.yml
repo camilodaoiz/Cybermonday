@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
   # Para ejecutarlo cada hora, todos los días
   schedule:
-    - cron: '0 * * * *' # 'Minuto 0 de cada hora'
+      - cron: '0 3 * * *' # Se ejecutará todos los días a las 3:00 AM (UTC)
 
 jobs:
   scrape:
