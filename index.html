@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Precios Black Friday</title>
+    <style>
+        /* Estilos CSS simples para que se vea ordenado */
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
+        h1 { text-align: center; color: #333; }
+        #lista-precios { max-width: 800px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .tv-item { border-bottom: 1px solid #eee; padding: 10px 0; }
+        .tv-item:last-child { border-bottom: none; }
+        .modelo { font-size: 1.2em; font-weight: bold; color: #0056b3; }
+        .marca { font-style: italic; color: #555; }
+        .precios { margin-top: 5px; }
+        .precio-antes { text-decoration: line-through; color: #888; margin-right: 10px; }
+        .precio-oferta { font-weight: bold; font-size: 1.3em; color: #d9534f; }
+        .sin-oferta { color: #777; font-style: italic; }
+        #contenedor-grafico { max-width: 800px; margin: 40px auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+
+    <h1>Seguimiento Precios Black Friday 📺</h1>
+
+    <h2>Listado de Precios</h2>
+    <div id="lista-precios">
+        </div>
+
+    <h2>Gráfico Comparativo</h2>
+    <div id="contenedor-grafico">
+        <canvas id="graficoPrecios"></canvas>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
