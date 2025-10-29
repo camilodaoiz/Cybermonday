@@ -1,43 +1,58 @@
 [
   {
-    "id": 1,
     "marca": "Samsung",
     "modelo": "QLED 55\" Q60C",
-    "tienda": "Cetrogar",
-    "url": "https://www.cetrogar.com.ar/samsung-tv-qled-55-q60c.html",
-    "selector_precio": ".price",
-    "historial_precios": [
+    "tecnologia": "QLED",
+    "tiendas": [
       {
-        "fecha": "2024-10-28T12:00:00Z",
-        "precio": 950000
+        "tienda": "Cetrogar",
+        "url": "https://www.cetrogar.com.ar/smart-tv-samsung-55-qled-q60c.html",
+        "selector_precio": ".price",
+        "historial_precios": []
+      },
+      {
+        "tienda": "Fravega",
+        "url": "https://www.fravega.com/p/smart-tv-samsung-55-qled-4k-q60c-196160/",
+        "selector_precio": "[data-test-id='product-price-new-amount-value']",
+        "historial_precios": []
+      },
+      {
+        "tienda": "Musimundo",
+        "url": "https://www.musimundo.com/audio-tv-video/televisores/tv-led/tv-55-samsung-qn55q60cagczb-qled-4k/p/00G0C1324",
+        "selector_precio": ".value",
+        "historial_precios": []
       }
     ]
   },
   {
-    "id": 2,
-    "marca": "LG",
-    "modelo": "OLED 55\" C3",
-    "tienda": "Fravega",
-    "url": "https://www.fravega.com/p/lg-smart-tv-55-pulgadas-oled-evo-c3-4k-195432/",
-    "selector_precio": "[data-test-id='product-price-new-amount-value']",
-    "historial_precios": [
-      {
-        "fecha": "2024-10-28T12:00:00Z",
-        "precio": 1500000
-      }
-    ]
-  },
-  {
-    "id": 3,
     "marca": "TCL",
     "modelo": "QLED 65\" C745",
-    "tienda": "Musimundo",
-    "url": "https://www.musimundo.com/audio-tv-video/televisores/tv-led/tv-led-65-tcl-l65c745-qled-4k/p/00G1A2251",
-    "selector_precio": ".value",
-    "historial_precios": [
+    "tecnologia": "QLED",
+    "tiendas": [
       {
-        "fecha": "2024-10-28T12:00:00Z",
-        "precio": 1100000
+        "tienda": "Musimundo",
+        "url": "https://www.musimundo.com/audio-tv-video/televisores/tv-led/tv-led-65-tcl-l65c745-qled-4k/p/00G1A2251",
+        "selector_precio": ".value",
+        "historial_precios": []
+      },
+      {
+        "tienda": "Megatone",
+        "url": "https://www.megatone.net/producto/smart-tv-tcl-65-qled-l65c745-google-tv_MKT3908TCL/",
+        "selector_precio": ".precio-numero",
+        "historial_precios": []
+      }
+    ]
+  },
+  {
+    "marca": "Hisense",
+    "modelo": "QLED 55\" 55E7K",
+    "tecnologia": "QLED",
+    "tiendas": [
+      {
+        "tienda": "OnCity",
+        "url": "https://www.oncity.com.ar/smart-tv-hisense-55--qled-55e7k/p",
+        "selector_precio": ".product-price-value",
+        "historial_precios": []
       }
     ]
   }
