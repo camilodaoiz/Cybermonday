@@ -1,17 +1,13 @@
 // Importar las librerías necesarias
 const fs = require('fs');
-
-// 1. Usar puppeteer-extra en lugar de puppeteer normal
 const puppeteer = require('puppeteer-extra');
-
-// 2. Cargar el plugin "stealth" (sigiloso)
 const StealthPlugin = require('puppeteer-extra-plugin-stealth');
-puppeteer.use(StealthPlugin()); // ¡La magia está aquí!
+puppeteer.use(StealthPlugin());
 
 // La ruta a nuestra "base de datos"
 const RUTA_JSON = './precios.json';
 
-// Función para limpiar el texto del precio (quitar "$", ".", etc.)
+// Función para limpiar el texto del precio
 function limpiarPrecio(textoPrecio) {
   if (!textoPrecio) return 0;
   return parseInt(
@@ -26,15 +22,15 @@ function limpiarPrecio(textoPrecio) {
 
 // Función principal del scraper
 async function iniciarScraping() {
-  console.log('Iniciando scraping con MODO STEALTH...');
+  console.log('Iniciando scraping con MODO GOOGLE BOT...');
   
   const datosAntiguos = JSON.parse(fs.readFileSync(RUTA_JSON));
   const fechaActual = new Date().toISOString();
   let nuevosDatos = [];
 
-  // 3. Iniciar el navegador "invisible"
+  // 1. Iniciar el navegador con la nueva opción 'headless: "new"'
   const browser = await puppeteer.launch({
-      headless: true, // "true" para que sea invisible en el servidor
+      headless: "new", // <-- ¡ARREGLADO EL WARNING!
       args: [
         '--no-sandbox',
         '--disable-setuid-sandbox',
@@ -53,22 +49,17 @@ async function iniciarScraping() {
       console.log(`--- Verificando tienda: ${tienda.tienda} (${tienda.url})`);
       const page = await browser.newPage();
       
-      // 4. Simular un navegador real (Viewport)
       await page.setViewport({ width: 1366, height: 768 });
       
-      // No interceptamos peticiones, puede ser sospechoso
-      
-      await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36');
+      // 2. ¡EL GRAN CAMBIO! Nos disfrazamos de Google Bot
+      await page.setUserAgent('Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)');
       
       try {
-        // 5. Ir a la URL con más paciencia
         await page.goto(tienda.url, { waitUntil: 'load', timeout: 90000 }); // 90 segundos
 
-        // 6. Esperar a que el selector del precio aparezca
         console.log(`--- Esperando el selector: ${tienda.selector_precio}`);
         await page.waitForSelector(tienda.selector_precio, { timeout: 15000 }); // 15 segundos
 
-        // 7. Extraer el texto del precio
         const textoPrecio = await page.$eval(tienda.selector_precio, (el) => el.textContent);
         const precioActual = limpiarPrecio(textoPrecio);
 
@@ -85,8 +76,6 @@ async function iniciarScraping() {
       } catch (error) {
         console.error(`--- ERROR al procesar ${tienda.tienda} (${tienda.url}): ${error.message}`);
         
-        // 8. ¡NUEVO! Tomar una captura de pantalla del error
-        // Esto nos dirá si es un CAPTCHA
         const screenshotPath = `error-${tienda.tienda}-${Date.now()}.png`;
         await page.screenshot({ path: screenshotPath, fullPage: true });
         console.log(`--- Captura de pantalla del error guardada en: ${screenshotPath}`);
