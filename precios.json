@@ -7,7 +7,7 @@
       {
         "tienda": "Cetrogar",
         "url": "https://www.cetrogar.com.ar/smart-tv-samsung-55-qled-q60c.html",
-        "selector_precio": ".price",
+        "selector_precio": ".atg_store_productPrice",
         "historial_precios": []
       },
       {
@@ -19,7 +19,7 @@
       {
         "tienda": "Musimundo",
         "url": "https://www.musimundo.com/audio-tv-video/televisores/tv-led/tv-55-samsung-qn55q60cagczb-qled-4k/p/00G0C1324",
-        "selector_precio": ".value",
+        "selector_precio": ".mus-pro-price-number",
         "historial_precios": []
       }
     ]
