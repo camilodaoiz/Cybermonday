@@ -27,65 +27,74 @@ async function cargarDatosPrecios() {
 // Función para mostrar los precios en formato de lista (números)
 function mostrarListaPrecios(televisores) {
     const contenedorLista = document.getElementById('lista-precios');
-    contenedorLista.innerHTML = ''; // Limpia el contenedor
+    contenedorLista.innerHTML = ''; 
+    
+    // 1. Agrupar por marca (como pediste)
+    const marcas = [...new Set(televisores.map(tv => tv.marca))]; // Lista única de marcas
+    
+    marcas.forEach(marca => {
+        // Añade un título para la marca
+        const tituloMarca = document.createElement('h2');
+        tituloMarca.textContent = marca;
+        contenedorLista.appendChild(tituloMarca);
+        
+        // Filtra los televisores de esta marca
+        const tvsDeMarca = televisores.filter(tv => tv.marca === marca);
 
-    televisores.forEach(tv => {
-        // Crea un elemento HTML para cada TV
-        const itemDiv = document.createElement('div');
-        itemDiv.className = 'tv-item';
+        tvsDeMarca.forEach(tv => {
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'tv-item';
 
-        // Define el HTML interno del elemento
-        let htmlPrecioOferta;
-        if (tv.precio_oferta > 0 && tv.precio_oferta < tv.precio_antes) {
-            // Si hay oferta válida
-            htmlPrecioOferta = `<span class="precio-oferta">$${tv.precio_oferta}</span>`;
-        } else {
-            // Si aún no hay oferta
-            htmlPrecioOferta = `<span class="sin-oferta">(Sin oferta aún)</span>`;
-        }
+            // 2. Extraer precios del historial
+            const historial = tv.historial_precios;
+            const precioOriginal = historial[0].precio; // El primer precio que guardamos
+            const precioActual = historial[historial.length - 1].precio; // El último precio
+            
+            let htmlPrecio;
+            if (precioActual < precioOriginal) {
+                // Hay oferta
+                htmlPrecio = `
+                    <span class="precio-antes">Antes: $${precioOriginal}</span>
+                    <span class="precio-oferta">Ahora: $${precioActual}</span>
+                `;
+            } else {
+                // El precio es igual o subió
+                htmlPrecio = `<span class="precio-actual">Precio: $${precioActual}</span>`;
+            }
 
-        itemDiv.innerHTML = `
-            <div class="modelo">${tv.marca} - ${tv.modelo}</div>
-            <div class="marca">Tienda: ${tv.tienda}</div>
-            <div class="precios">
-                <span class="precio-antes">Antes: $${tv.precio_antes}</span>
-                ${htmlPrecioOferta}
-            </div>
-        `;
-
-        // Añade el elemento a la lista
-        contenedorLista.appendChild(itemDiv);
+            itemDiv.innerHTML = `
+                <div class="modelo">${tv.marca} - ${tv.modelo} (<a href="${tv.url}" target="_blank">${tv.tienda}</a>)</div>
+                <div class="precios">
+                    ${htmlPrecio}
+                </div>
+            `;
+            contenedorLista.appendChild(itemDiv);
+        });
     });
 }
 
-// Función para mostrar el gráfico (con Chart.js)
 function mostrarGrafico(televisores) {
     const ctx = document.getElementById('graficoPrecios').getContext('2d');
 
-    // Prepara los datos para el gráfico
-    const etiquetas = televisores.map(tv => `${tv.marca} ${tv.modelo.substring(0, 10)}...`); // Nombres cortos
-    const datosPrecioAntes = televisores.map(tv => tv.precio_antes);
-    const datosPrecioOferta = televisores.map(tv => tv.precio_oferta > 0 ? tv.precio_oferta : null); // Muestra null si no hay oferta
+    // 3. Preparar datos del historial para el gráfico
+    const etiquetas = televisores.map(tv => `${tv.marca} ${tv.modelo.substring(0, 10)}...`);
+    const datosPrecioOriginal = televisores.map(tv => tv.historial_precios[0].precio);
+    const datosPrecioActual = televisores.map(tv => tv.historial_precios[tv.historial_precios.length - 1].precio);
 
-    // Crea el gráfico
     new Chart(ctx, {
-        type: 'bar', // Tipo de gráfico: barras
+        type: 'bar',
         data: {
             labels: etiquetas,
             datasets: [
                 {
-                    label: 'Precio Antes',
-                    data: datosPrecioAntes,
-                    backgroundColor: 'rgba(150, 150, 150, 0.6)', // Gris
-                    borderColor: 'rgba(150, 150, 150, 1)',
-                    borderWidth: 1
+                    label: 'Precio Original (Referencia)',
+                    data: datosPrecioOriginal,
+                    backgroundColor: 'rgba(150, 150, 150, 0.6)',
                 },
                 {
-                    label: 'Precio Oferta (Black Friday)',
-                    data: datosPrecioOferta,
-                    backgroundColor: 'rgba(217, 83, 79, 0.6)', // Rojo
-                    borderColor: 'rgba(217, 83, 79, 1)',
-                    borderWidth: 1
+                    label: 'Precio Actual',
+                    data: datosPrecioActual,
+                    backgroundColor: 'rgba(217, 83, 79, 0.6)',
                 }
             ]
         },
