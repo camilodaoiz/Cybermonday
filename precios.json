@@ -1,59 +1,27 @@
 [
   {
-    "marca": "Samsung",
-    "modelo": "QLED 55\" Q60C",
-    "tecnologia": "QLED",
-    "tiendas": [
-      {
-        "tienda": "Cetrogar",
-        "url": "https://www.cetrogar.com.ar/smart-tv-samsung-55-qled-q60c.html",
-        "selector_precio": ".atg_store_productPrice",
-        "historial_precios": []
-      },
-      {
-        "tienda": "Fravega",
-        "url": "https://www.fravega.com/p/smart-tv-samsung-55-qled-4k-q60c-196160/",
-        "selector_precio": "[data-test-id='product-price-new-amount-value']",
-        "historial_precios": []
-      },
-      {
-        "tienda": "Musimundo",
-        "url": "https://www.musimundo.com/audio-tv-video/televisores/tv-led/tv-55-samsung-qn55q60cagczb-qled-4k/p/00G0C1324",
-        "selector_precio": ".mus-pro-price-number",
-        "historial_precios": []
-      }
-    ]
-  },
-  {
     "marca": "TCL",
-    "modelo": "QLED 65\" C745",
+    "modelo": "QLED 55\" C655",
     "tecnologia": "QLED",
     "tiendas": [
       {
         "tienda": "Musimundo",
-        "url": "https://www.musimundo.com/audio-tv-video/televisores/tv-led/tv-led-65-tcl-l65c745-qled-4k/p/00G1A2251",
-        "selector_precio": ".value",
+        "url": "https://www.musimundo.com/audio-tv-video/televisores/smart-qled-google-tv-tcl-55-pulgadas-4k-uhd-55c655a-f/p/01058006",
+        "selector_precio": "product-price-panel-pdp__price",
         "historial_precios": []
       },
       {
         "tienda": "Megatone",
-        "url": "https://www.megatone.net/producto/smart-tv-tcl-65-qled-l65c745-google-tv_MKT3908TCL/",
-        "selector_precio": ".precio-numero",
+        "url": "https://www.megatone.net/producto/tv-qled-smart-55p-4k-55c655a-go-tcl_TEL5569TCL/",
+        "selector_precio": "Mostrado flex-shrink-0",
         "historial_precios": []
-      }
-    ]
-  },
-  {
-    "marca": "Hisense",
-    "modelo": "QLED 55\" 55E7K",
-    "tecnologia": "QLED",
-    "tiendas": [
+      },
       {
-        "tienda": "OnCity",
-        "url": "https://www.oncity.com.ar/smart-tv-hisense-55--qled-55e7k/p",
-        "selector_precio": ".product-price-value",
+        "tienda": "Garbarino",
+        "url": "https://www.garbarino.com/producto/tv-qled-smart-55p-4k-55c655a-go-tcl_TEL5569TCL/",
+        "selector_precio": "price__value",
         "historial_precios": []
-      }
+      }, 
     ]
   }
 ]
