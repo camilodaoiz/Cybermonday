@@ -5,19 +5,88 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Precios Black Friday</title>
     <style>
-        /* Estilos CSS simples para que se vea ordenado */
-        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
-        h1 { text-align: center; color: #333; }
-        #lista-precios { max-width: 800px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .tv-item { border-bottom: 1px solid #eee; padding: 10px 0; }
-        .tv-item:last-child { border-bottom: none; }
-        .modelo { font-size: 1.2em; font-weight: bold; color: #0056b3; }
-        .marca { font-style: italic; color: #555; }
-        .precios { margin-top: 5px; }
-        .precio-antes { text-decoration: line-through; color: #888; margin-right: 10px; }
-        .precio-oferta { font-weight: bold; font-size: 1.3em; color: #d9534f; }
-        .sin-oferta { color: #777; font-style: italic; }
-        #contenedor-grafico { max-width: 800px; margin: 40px auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        /* Estilos CSS simples para la nueva estructura */
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; margin: 0; padding: 20px; background-color: #f0f2f5; }
+h1 { text-align: center; color: #1c1e21; }
+h2, h3 { margin: 0 0 10px 0; }
+
+/* Contenedor principal de la lista */
+#lista-precios { max-width: 900px; margin: 20px auto; background: #f0f2f5; padding: 0; border-radius: 8px; }
+
+/* Título de la MARCA (Samsung, LG...) */
+.titulo-marca {
+    font-size: 2em;
+    font-weight: 700;
+    color: #111;
+    border-bottom: 3px solid #0056b3;
+    padding-bottom: 8px;
+    margin-top: 40px;
+}
+.titulo-marca:first-of-type {
+    margin-top: 0;
+}
+
+/* Contenedor de un MODELO específico */
+.modelo-item {
+    border: 1px solid #ddd;
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+}
+
+/* Título del MODELO (QLED 55" Q60C) */
+.modelo-titulo {
+    font-size: 1.5em;
+    font-weight: 600;
+    color: #0056b3;
+}
+
+/* Lista de tiendas para ese modelo */
+.lista-tiendas {
+    list-style: none;
+    padding-left: 0;
+    margin: 10px 0 0 0;
+}
+
+/* Item de una tienda (Fravega: $XXX) */
+.tienda-precio {
+    font-size: 1.15em;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.tienda-precio:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+.tienda-precio a {
+    font-weight: 600;
+    text-decoration: none;
+    color: #337ab7;
+}
+.tienda-precio a:hover {
+    text-decoration: underline;
+}
+
+/* Estilos para los precios */
+.precio-bajo { font-weight: 700; color: #28a745; } /* Verde */
+.precio-subio { font-weight: 700; color: #dc3545; } /* Rojo */
+.precio-igual { font-weight: 700; color: #333; }
+.sin-datos { font-style: italic; color: #888; }
+
+/* Gráfico */
+#contenedor-grafico { 
+    max-width: 900px; 
+    margin: 40px auto; 
+    background: #fff; 
+    padding: 20px; 
+    border-radius: 8px; 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08); 
+}
     </style>
 </head>
 <body>
