@@ -1,22 +1,20 @@
 // Espera a que todo el contenido del HTML esté cargado
 document.addEventListener("DOMContentLoaded", () => {
-    // Llama a la función principal para cargar los datos
     cargarDatosPrecios();
 });
 
 // Función asíncrona para cargar los datos desde el archivo JSON
 async function cargarDatosPrecios() {
     try {
-        // 1. Carga los datos del archivo precios.json
-        const response = await fetch('precios.json');
+        // Usamos un 'cache buster' para asegurarnos de que siempre cargue el JSON más nuevo
+        const response = await fetch(`precios.json?v=${new Date().getTime()}`);
         if (!response.ok) {
             throw new Error('No se pudo cargar precios.json');
         }
-        const televisores = await response.json();
+        const modelos = await response.json();
 
-        // 2. Llama a las funciones para mostrar los datos
-        mostrarListaPrecios(televisores);
-        mostrarGrafico(televisores);
+        mostrarListaPrecios(modelos);
+        mostrarGrafico(modelos);
 
     } catch (error) {
         console.error("Error al cargar los datos:", error);
@@ -24,93 +22,138 @@ async function cargarDatosPrecios() {
     }
 }
 
-// Función para mostrar los precios en formato de lista (números)
-function mostrarListaPrecios(televisores) {
+// Función para mostrar los precios en formato de lista
+function mostrarListaPrecios(modelos) {
     const contenedorLista = document.getElementById('lista-precios');
     contenedorLista.innerHTML = ''; 
-    
-    // 1. Agrupar por marca (como pediste)
-    const marcas = [...new Set(televisores.map(tv => tv.marca))]; // Lista única de marcas
+
+    // 1. Agrupar por marca
+    const marcas = [...new Set(modelos.map(m => m.marca))].sort();
     
     marcas.forEach(marca => {
         // Añade un título para la marca
         const tituloMarca = document.createElement('h2');
+        tituloMarca.className = 'titulo-marca';
         tituloMarca.textContent = marca;
         contenedorLista.appendChild(tituloMarca);
         
-        // Filtra los televisores de esta marca
-        const tvsDeMarca = televisores.filter(tv => tv.marca === marca);
+        // 2. Filtrar modelos de esta marca
+        const modelosDeMarca = modelos.filter(m => m.marca === marca);
 
-        tvsDeMarca.forEach(tv => {
-            const itemDiv = document.createElement('div');
-            itemDiv.className = 'tv-item';
-
-            // 2. Extraer precios del historial
-            const historial = tv.historial_precios;
-            const precioOriginal = historial[0].precio; // El primer precio que guardamos
-            const precioActual = historial[historial.length - 1].precio; // El último precio
+        modelosDeMarca.forEach(modelo => {
+            // 3. Crear el contenedor para el MODELO
+            const modeloDiv = document.createElement('div');
+            modeloDiv.className = 'modelo-item';
             
-            let htmlPrecio;
-            if (precioActual < precioOriginal) {
-                // Hay oferta
-                htmlPrecio = `
-                    <span class="precio-antes">Antes: $${precioOriginal}</span>
-                    <span class="precio-oferta">Ahora: $${precioActual}</span>
-                `;
-            } else {
-                // El precio es igual o subió
-                htmlPrecio = `<span class="precio-actual">Precio: $${precioActual}</span>`;
-            }
+            let htmlTiendas = ''; // String para acumular los HTML de las tiendas
+            
+            // 4. Iterar por cada TIENDA en este modelo y ordenarlas por precio
+            const tiendasOrdenadas = modelo.tiendas.sort((a, b) => {
+                const precioA = a.historial_precios?.length ? a.historial_precios[a.historial_precios.length - 1].precio : Infinity;
+                const precioB = b.historial_precios?.length ? b.historial_precios[b.historial_precios.length - 1].precio : Infinity;
+                return precioA - precioB;
+            });
 
-            itemDiv.innerHTML = `
-                <div class="modelo">${tv.marca} - ${tv.modelo} (<a href="${tv.url}" target="_blank">${tv.tienda}</a>)</div>
-                <div class="precios">
-                    ${htmlPrecio}
-                </div>
+            tiendasOrdenadas.forEach(tienda => {
+                const historial = tienda.historial_precios;
+                let precioActualStr = '<span class="sin-datos">(Sin datos)</span>';
+                
+                if (historial && historial.length > 0) {
+                    // Tomamos el último precio del historial
+                    const precioActual = historial[historial.length - 1].precio;
+                    
+                    if (historial.length > 1) {
+                        // Comparamos con el precio *anterior* en el historial
+                        const precioAnterior = historial[historial.length - 2].precio;
+                        if (precioActual < precioAnterior) {
+                            precioActualStr = `<span class="precio-bajo">$${precioActual} (Bajó)</span>`;
+                        } else if (precioActual > precioAnterior) {
+                            precioActualStr = `<span class="precio-subio">$${precioActual} (Subió)</span>`;
+                        } else {
+                            precioActualStr = `<span class="precio-igual">$${precioActual}</span>`;
+                        }
+                    } else {
+                        // Solo hay un precio en el historial, es el precio base
+                        precioActualStr = `<span class="precio-igual">$${precioActual}</span>`;
+                    }
+                }
+                
+                htmlTiendas += `
+                    <li class="tienda-precio">
+                        <a href="${tienda.url}" target="_blank">${tienda.tienda}</a>:
+                        ${precioActualStr}
+                    </li>
+                `;
+            });
+
+            // 5. Insertar el HTML del modelo
+            modeloDiv.innerHTML = `
+                <h3 class="modelo-titulo">${modelo.modelo}</h3>
+                <ul class="lista-tiendas">
+                    ${htmlTiendas}
+                </ul>
             `;
-            contenedorLista.appendChild(itemDiv);
+            contenedorLista.appendChild(modeloDiv);
         });
     });
 }
 
-function mostrarGrafico(televisores) {
-    const ctx = document.getElementById('graficoPrecios').getContext('2d');
+// Función para mostrar el gráfico (con Chart.js)
+function mostrarGrafico(modelos) {
+    const contenedorGrafico = document.getElementById('contenedor-grafico');
+    contenedorGrafico.innerHTML = ''; // Limpiamos el canvas viejo
+    
+    // Creamos un nuevo canvas
+    const newCanvas = document.createElement('canvas');
+    newCanvas.id = 'graficoPrecios';
+    contenedorGrafico.appendChild(newCanvas);
+    const ctx = newCanvas.getContext('2d');
+    
+    let etiquetas = [];
+    let datosPreciosActuales = [];
 
-    // 3. Preparar datos del historial para el gráfico
-    const etiquetas = televisores.map(tv => `${tv.marca} ${tv.modelo.substring(0, 10)}...`);
-    const datosPrecioOriginal = televisores.map(tv => tv.historial_precios[0].precio);
-    const datosPrecioActual = televisores.map(tv => tv.historial_precios[tv.historial_precios.length - 1].precio);
+    // Preparamos los datos para el gráfico
+    // Un gráfico comparando el precio actual de cada tienda para cada modelo
+    modelos.forEach(modelo => {
+        modelo.tiendas.forEach(tienda => {
+            // Etiqueta: "Samsung Q60C (Cetrogar)"
+            etiquetas.push(`${modelo.marca.substring(0,3)}. ${modelo.modelo.substring(0,10)}... (${tienda.tienda.substring(0,4)}.)`);
+            
+            let precio = null; // null si no hay datos
+            if (tienda.historial_precios && tienda.historial_precios.length > 0) {
+                precio = tienda.historial_precios[tienda.historial_precios.length - 1].precio;
+            }
+            datosPreciosActuales.push(precio);
+        });
+    });
 
     new Chart(ctx, {
-        type: 'bar',
+        type: 'bar', // Gráfico de barras
         data: {
             labels: etiquetas,
             datasets: [
                 {
-                    label: 'Precio Original (Referencia)',
-                    data: datosPrecioOriginal,
-                    backgroundColor: 'rgba(150, 150, 150, 0.6)',
-                },
-                {
                     label: 'Precio Actual',
-                    data: datosPrecioActual,
+                    data: datosPreciosActuales,
                     backgroundColor: 'rgba(217, 83, 79, 0.6)',
+                    borderColor: 'rgba(217, 83, 79, 1)',
+                    borderWidth: 1
                 }
             ]
         },
         options: {
+            indexAxis: 'y', // Ponemos las barras en horizontal (mejor si son muchas)
+            responsive: true,
             scales: {
-                y: {
+                x: { // Eje X (precios)
                     beginAtZero: true,
                     ticks: {
-                        // Formatear el eje Y como dinero
                         callback: function(value) {
-                            return '$' + value;
+                            return '$' + new Intl.NumberFormat('es-AR').format(value);
                         }
                     }
                 }
             },
-            responsive: true,
             plugins: {
                 legend: {
                     position: 'top',
@@ -122,8 +165,8 @@ function mostrarGrafico(televisores) {
                             if (label) {
                                 label += ': ';
                             }
-                            if (context.parsed.y !== null) {
-                                label += new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'USD' }).format(context.parsed.y);
+                            if (context.parsed.x !== null) {
+                                label += new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(context.parsed.x);
                             }
                             return label;
                         }
