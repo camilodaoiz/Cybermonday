@@ -1,0 +1,34 @@
+[
+  {
+    "id": 1,
+    "marca": "Samsung",
+    "modelo": "QLED 55\" Q60C",
+    "tienda": "Tienda A",
+    "precio_antes": 950,
+    "precio_oferta": 0
+  },
+  {
+    "id": 2,
+    "marca": "LG",
+    "modelo": "OLED 55\" C3",
+    "tienda": "Tienda B",
+    "precio_antes": 1500,
+    "precio_oferta": 0
+  },
+  {
+    "id": 3,
+    "marca": "TCL",
+    "modelo": "QLED 65\" C745",
+    "tienda": "Tienda A",
+    "precio_antes": 1100,
+    "precio_oferta": 0
+  },
+  {
+    "id": 4,
+    "marca": "Huawei",
+    "modelo": "Vision S 65\"",
+    "tienda": "Tienda C",
+    "precio_antes": 800,
+    "precio_oferta": 0
+  }
+]
