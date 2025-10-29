@@ -1,0 +1,42 @@
+name: Scraper de Precios
+
+on:
+  # Para ejecutarlo manualmente desde la pestaña "Actions"
+  workflow_dispatch:
+  # Para ejecutarlo cada hora, todos los días
+  schedule:
+    - cron: '0 * * * *' # 'Minuto 0 de cada hora'
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest # Usará un servidor Linux
+
+    steps:
+      # 1. Clona tu repositorio al servidor
+      - name: Checkout del repositorio
+        uses: actions/checkout@v3
+
+      # 2. Configura Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' # Usamos Node.js versión 18
+
+      # 3. Instala las dependencias (Puppeteer y sus librerías)
+      - name: Instalar dependencias
+        run: |
+          npm install
+
+      # 4. Ejecuta el script de scraping
+      - name: Correr el script
+        run: node scraper.js
+
+      # 5. Guarda los cambios (el precios.json actualizado) en el repo
+      - name: Commit de los archivos
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add precios.json
+          # Solo hace commit si hay cambios reales en el archivo
+          git commit -m "Actualización automática de precios 🤖" -a || echo "No hay cambios en los precios"
+          git push
