@@ -40,3 +40,21 @@ jobs:
           # Solo hace commit si hay cambios reales en el archivo
           git commit -m "Actualización automática de precios 🤖" -a || echo "No hay cambios en los precios"
           git push
+
+          # 5. Guarda los cambios (el precios.json actualizado) en el repo
+          - name: Commit de los archivos
+            run: |
+              git config --local user.email "action@github.com"
+              git config --local user.name "GitHub Action"
+              git add precios.json
+              # Solo hace commit si hay cambios reales en el archivo
+              git commit -m "Actualización automática de precios 🤖" -a || echo "No hay cambios en los precios"
+              git push
+
+          # 6. ¡NUEVO PASO! Guardar capturas si hay error
+          - name: Guardar capturas de error (si existen)
+            uses: actions/upload-artifact@v3
+            if: failure() # Solo se ejecuta si un paso anterior falló
+            with:
+              name: screenshots-de-error
+              path: error-*.png # Sube todos los archivos que empiecen con 'error-'
