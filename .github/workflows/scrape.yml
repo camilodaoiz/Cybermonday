@@ -43,7 +43,7 @@ jobs:
 
       # 6. Guardar capturas si hay error
       - name: Guardar capturas de error (si existen)
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: failure() # Solo se ejecuta si un paso anterior falló
         with:
           name: screenshots-de-error
