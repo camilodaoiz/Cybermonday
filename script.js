@@ -1,12 +1,9 @@
-// Espera a que todo el contenido del HTML esté cargado
 document.addEventListener("DOMContentLoaded", () => {
     cargarDatosPrecios();
 });
 
-// Función asíncrona para cargar los datos desde el archivo JSON
 async function cargarDatosPrecios() {
     try {
-        // Usamos un 'cache buster' para asegurarnos de que siempre cargue el JSON más nuevo
         const response = await fetch(`precios.json?v=${new Date().getTime()}`);
         if (!response.ok) {
             throw new Error('No se pudo cargar precios.json');
@@ -27,66 +24,64 @@ function mostrarListaPrecios(modelos) {
     const contenedorLista = document.getElementById('lista-precios');
     contenedorLista.innerHTML = ''; 
 
-    // 1. Agrupar por marca
     const marcas = [...new Set(modelos.map(m => m.marca))].sort();
     
     marcas.forEach(marca => {
-        // Añade un título para la marca
         const tituloMarca = document.createElement('h2');
         tituloMarca.className = 'titulo-marca';
         tituloMarca.textContent = marca;
         contenedorLista.appendChild(tituloMarca);
         
-        // 2. Filtrar modelos de esta marca
         const modelosDeMarca = modelos.filter(m => m.marca === marca);
 
         modelosDeMarca.forEach(modelo => {
-            // 3. Crear el contenedor para el MODELO
             const modeloDiv = document.createElement('div');
             modeloDiv.className = 'modelo-item';
             
-            let htmlTiendas = ''; // String para acumular los HTML de las tiendas
+            let htmlTiendas = ''; 
             
-            // 4. Iterar por cada TIENDA en este modelo y ordenarlas por precio
+            // Ordenar tiendas por el precio de AHORA
             const tiendasOrdenadas = modelo.tiendas.sort((a, b) => {
-                const precioA = a.historial_precios?.length ? a.historial_precios[a.historial_precios.length - 1].precio : Infinity;
-                const precioB = b.historial_precios?.length ? b.historial_precios[b.historial_precios.length - 1].precio : Infinity;
-                return precioA - precioB;
+                return (a.precio_ahora || Infinity) - (b.precio_ahora || Infinity);
             });
 
             tiendasOrdenadas.forEach(tienda => {
-                const historial = tienda.historial_precios;
-                let precioActualStr = '<span class="sin-datos">(Sin datos)</span>';
-                
-                if (historial && historial.length > 0) {
-                    // Tomamos el último precio del historial
-                    const precioActual = historial[historial.length - 1].precio;
-                    
-                    if (historial.length > 1) {
-                        // Comparamos con el precio *anterior* en el historial
-                        const precioAnterior = historial[historial.length - 2].precio;
-                        if (precioActual < precioAnterior) {
-                            precioActualStr = `<span class="precio-bajo">$${precioActual} (Bajó)</span>`;
-                        } else if (precioActual > precioAnterior) {
-                            precioActualStr = `<span class="precio-subio">$${precioActual} (Subió)</span>`;
-                        } else {
-                            precioActualStr = `<span class="precio-igual">$${precioActual}</span>`;
-                        }
-                    } else {
-                        // Solo hay un precio en el historial, es el precio base
-                        precioActualStr = `<span class="precio-igual">$${precioActual}</span>`;
-                    }
+                const precioAntes = tienda.precio_antes || 0;
+                const precioAhora = tienda.precio_ahora || 0;
+
+                let htmlPrecios = '';
+                let clasePrecioAhora = 'precio-igual';
+
+                if (precioAhora > 0 && precioAhora < precioAntes) {
+                    clasePrecioAhora = 'precio-bajo'; // Verde
+                } else if (precioAhora > 0 && precioAhora > precioAntes) {
+                    clasePrecioAhora = 'precio-subio'; // Rojo
+                } else if (precioAhora <= 0) {
+                    clasePrecioAhora = 'sin-datos';
+                }
+
+                // Genera el HTML para los precios
+                if (precioAntes > 0) {
+                     htmlPrecios = `<span class="precio-antes">Antes: $${new Intl.NumberFormat('es-AR').format(precioAntes)}</span>`;
                 }
                 
+                if (precioAhora > 0) {
+                    htmlPrecios += `<span class="${clasePrecioAhora}">Ahora: $${new Intl.NumberFormat('es-AR').format(precioAhora)}</span>`;
+                } else {
+                     htmlPrecios += `<span class="sin-datos">(Sin precio CyberMonday)</span>`;
+                }
+
+                // Genera el HTML de la tienda
                 htmlTiendas += `
                     <li class="tienda-precio">
-                        <a href="${tienda.url}" target="_blank">${tienda.tienda}</a>:
-                        ${precioActualStr}
+                        <a href="${tienda.url}" target="_blank">${tienda.tienda}</a>
+                        <div class="precios-comparativa">
+                            ${htmlPrecios}
+                        </div>
                     </li>
                 `;
             });
 
-            // 5. Insertar el HTML del modelo
             modeloDiv.innerHTML = `
                 <h3 class="modelo-titulo">${modelo.modelo}</h3>
                 <ul class="lista-tiendas">
@@ -101,29 +96,23 @@ function mostrarListaPrecios(modelos) {
 // Función para mostrar el gráfico (con Chart.js)
 function mostrarGrafico(modelos) {
     const contenedorGrafico = document.getElementById('contenedor-grafico');
-    contenedorGrafico.innerHTML = ''; // Limpiamos el canvas viejo
+    contenedorGrafico.innerHTML = ''; 
     
-    // Creamos un nuevo canvas
     const newCanvas = document.createElement('canvas');
     newCanvas.id = 'graficoPrecios';
     contenedorGrafico.appendChild(newCanvas);
     const ctx = newCanvas.getContext('2d');
     
     let etiquetas = [];
-    let datosPreciosActuales = [];
+    let datosPreciosAntes = [];
+    let datosPreciosAhora = [];
 
     // Preparamos los datos para el gráfico
-    // Un gráfico comparando el precio actual de cada tienda para cada modelo
     modelos.forEach(modelo => {
         modelo.tiendas.forEach(tienda => {
-            // Etiqueta: "Samsung Q60C (Cetrogar)"
-            etiquetas.push(`${modelo.marca.substring(0,3)}. ${modelo.modelo.substring(0,10)}... (${tienda.tienda.substring(0,4)}.)`);
-            
-            let precio = null; // null si no hay datos
-            if (tienda.historial_precios && tienda.historial_precios.length > 0) {
-                precio = tienda.historial_precios[tienda.historial_precios.length - 1].precio;
-            }
-            datosPreciosActuales.push(precio);
+            etiquetas.push(`${modelo.modelo.substring(0,10)}... (${tienda.tienda})`);
+            datosPreciosAntes.push(tienda.precio_antes || null);
+            datosPreciosAhora.push(tienda.precio_ahora || null);
         });
     });
 
@@ -133,8 +122,15 @@ function mostrarGrafico(modelos) {
             labels: etiquetas,
             datasets: [
                 {
-                    label: 'Precio Actual',
-                    data: datosPreciosActuales,
+                    label: 'Precio Antes',
+                    data: datosPreciosAntes,
+                    backgroundColor: 'rgba(150, 150, 150, 0.6)',
+                    borderColor: 'rgba(150, 150, 150, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Precio CyberMonday',
+                    data: datosPreciosAhora,
                     backgroundColor: 'rgba(217, 83, 79, 0.6)',
                     borderColor: 'rgba(217, 83, 79, 1)',
                     borderWidth: 1
@@ -142,10 +138,10 @@ function mostrarGrafico(modelos) {
             ]
         },
         options: {
-            indexAxis: 'y', // Ponemos las barras en horizontal (mejor si son muchas)
+            indexAxis: 'y', // Barras horizontales
             responsive: true,
             scales: {
-                x: { // Eje X (precios)
+                x: { 
                     beginAtZero: true,
                     ticks: {
                         callback: function(value) {
