@@ -8,45 +8,40 @@
         "tienda": "Musimundo",
         "url": "https://www.musimundo.com/audio-tv-video/televisores/smart-qled-google-tv-tcl-55-pulgadas-4k-uhd-55c655a-f/p/01058006",
         "selector_precio": ".mus-pro-price-number",
-        "historial_precios": [
-          { "29": "2025-11-03T12:00:00Z", "precio": 869.999 },
-           { "3": "2025-11-03T12:00:00Z", "precio": 749.999 }
+        "precio_antes": 869.999,
+        "precio_ahora": 749.999
         ]
       },
       {
         "tienda": "Megatone",
         "url": "https://www.megatone.net/producto/tv-qled-smart-55p-4k-55c655a-go-tcl_TEL5569TCL/",
         "selector_precio": ".precio-numero",
-        "historial_precios": [
-          { "29": "2025-11-03T12:00:00Z", "precio": 879.999 },
-           { "3": "2025-11-03T12:00:00Z", "precio": 749.999 }
+        "precio_antes": 879.999,
+        "precio_ahora": 749.999
          ]
       },
       {
         "tienda": "OnCity",
         "url": "https://www.oncity.com/smart-qled-google-tv-tcl-55--qled-4k-3840-x-2160-55c655a-f-154055/p",
         "selector_precio": ".product-price-value",
-        "historial_precios": [
-          { "29": "2025-11-03T12:00:00Z", "precio": 869.999 },
-           { "3": "2025-11-03T12:00:00Z", "precio": 749.999 }
+        "precio_antes": 869.999,
+        "precio_ahora": 749.999
         ]
       },
       {
         "tienda": "Naldo",
         "url": "https://www.naldo.com.ar/55-l55c655a-qled-4k-android-tv-505778/p",
         "selector_precio": ".best-price .price",
-        "historial_precios": [
-          { "29": "2025-11-03T12:00:00Z", "precio": 799.999 },
-           { "3": "2025-11-03T12:00:00Z", "precio": 799.999 }
+        "precio_antes": 799.999,
+        "precio_ahora": 799.999
         ]
       },
       {
         "tienda": "Fravega",
         "url": "https://www.fravega.com/p/smart-tv-tcl-55-qled-55c655-502785/",
         "selector_precio": "[data-test-id='product-price-new-amount-value']",
-        "historial_precios": [
-          { "29": "2025-11-03T12:00:00Z", "precio": 829.999 },
-           { "3": "2025-11-03T12:00:00Z", "precio": 749.999 }
+        "precio_antes": 829.999,
+        "precio_ahora": 749.999
         ]
       }
     ]
