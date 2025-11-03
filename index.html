@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Precios Black Friday</title>
     <style>
-        /* Estilos CSS simples para la nueva estructura */
+        /* Estilos CSS actualizados */
 body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; margin: 0; padding: 20px; background-color: #f0f2f5; }
 h1 { text-align: center; color: #1c1e21; }
 h2, h3 { margin: 0 0 10px 0; }
@@ -58,6 +58,7 @@ h2, h3 { margin: 0 0 10px 0; }
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap; /* Para celulares */
 }
 .tienda-precio:last-child {
     border-bottom: none;
@@ -67,16 +68,37 @@ h2, h3 { margin: 0 0 10px 0; }
     font-weight: 600;
     text-decoration: none;
     color: #337ab7;
+    margin-right: 15px; /* Espacio entre el link y los precios */
 }
 .tienda-precio a:hover {
     text-decoration: underline;
 }
 
+/* Contenedor de los dos precios */
+.precios-comparativa {
+    text-align: right;
+    flex-shrink: 0; /* Evita que se achique */
+}
+
 /* Estilos para los precios */
-.precio-bajo { font-weight: 700; color: #28a745; } /* Verde */
-.precio-subio { font-weight: 700; color: #dc3545; } /* Rojo */
-.precio-igual { font-weight: 700; color: #333; }
-.sin-datos { font-style: italic; color: #888; }
+.precio-antes {
+    display: block;
+    font-size: 0.9em;
+    color: #888;
+    text-decoration: line-through; /* TACHADO */
+}
+.precio-bajo { 
+    display: block; font-weight: 700; font-size: 1.1em; color: #28a745; /* Verde */
+}
+.precio-subio { 
+    display: block; font-weight: 700; font-size: 1.1em; color: #dc3545; /* Rojo */
+}
+.precio-igual { 
+    display: block; font-weight: 700; font-size: 1.1em; color: #333; 
+}
+.sin-datos { 
+    display: block; font-style: italic; color: #888; font-size: 1.1em;
+}
 
 /* Gráfico */
 #contenedor-grafico { 
