@@ -10,7 +10,6 @@
         "selector_precio": ".mus-pro-price-number",
         "precio_antes": 869.999,
         "precio_ahora": 749.999
-        ]
       },
       {
         "tienda": "Megatone",
@@ -18,7 +17,6 @@
         "selector_precio": ".precio-numero",
         "precio_antes": 879.999,
         "precio_ahora": 749.999
-         ]
       },
       {
         "tienda": "OnCity",
@@ -26,7 +24,6 @@
         "selector_precio": ".product-price-value",
         "precio_antes": 869.999,
         "precio_ahora": 749.999
-        ]
       },
       {
         "tienda": "Naldo",
@@ -34,7 +31,6 @@
         "selector_precio": ".best-price .price",
         "precio_antes": 799.999,
         "precio_ahora": 799.999
-        ]
       },
       {
         "tienda": "Fravega",
@@ -42,7 +38,6 @@
         "selector_precio": "[data-test-id='product-price-new-amount-value']",
         "precio_antes": 829.999,
         "precio_ahora": 749.999
-        ]
       }
     ]
   }
