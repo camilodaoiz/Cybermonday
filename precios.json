@@ -9,7 +9,8 @@
         "url": "https://www.musimundo.com/audio-tv-video/televisores/smart-qled-google-tv-tcl-55-pulgadas-4k-uhd-55c655a-f/p/01058006",
         "selector_precio": ".mus-pro-price-number",
         "historial_precios": [
-          { "29": "2025-11-03T12:00:00Z", "precio": 869.999 } 
+          { "29": "2025-11-03T12:00:00Z", "precio": 869.999 }
+           { "3": "2025-11-03T12:00:00Z", "precio": 749.999 }
         ]
       },
       {
@@ -18,8 +19,8 @@
         "selector_precio": ".precio-numero",
         "historial_precios": [
           { "29": "2025-11-03T12:00:00Z", "precio": 879.999 } 
-          { "3": "2025-11-03T12:00:00Z", "precio": 749.999 }
-        ]
+           { "3": "2025-11-03T12:00:00Z", "precio": 749.999 }
+         ]
       },
       {
         "tienda": "OnCity",
@@ -27,6 +28,7 @@
         "selector_precio": ".product-price-value",
         "historial_precios": [
           { "29": "2025-11-03T12:00:00Z", "precio": 869.999 }
+           { "3": "2025-11-03T12:00:00Z", "precio": 749.999 }
         ]
       },
       {
@@ -35,6 +37,7 @@
         "selector_precio": ".best-price .price",
         "historial_precios": [
           { "29": "2025-11-03T12:00:00Z", "precio": 799.999 }
+           { "3": "2025-11-03T12:00:00Z", "precio": 799.999 }
         ]
       },
       {
@@ -43,6 +46,7 @@
         "selector_precio": "[data-test-id='product-price-new-amount-value']",
         "historial_precios": [
           { "29": "2025-11-03T12:00:00Z", "precio": 829.999 }
+           { "3": "2025-11-03T12:00:00Z", "precio": 749.999 }
         ]
       }
     ]
