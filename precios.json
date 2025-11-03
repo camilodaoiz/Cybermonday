@@ -18,6 +18,7 @@
         "selector_precio": ".precio-numero",
         "historial_precios": [
           { "29": "2025-11-03T12:00:00Z", "precio": 879.999 } 
+          { "3": "2025-11-03T12:00:00Z", "precio": 749.999 }
         ]
       },
       {
